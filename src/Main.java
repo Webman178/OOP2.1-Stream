@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -10,14 +7,18 @@ import java.util.stream.Stream;
 public class Main {
     public static <T> void findMinMax(Stream<? extends T> stream,
                                       Comparator<? super T> order,
-                                      BiConsumer<? super T, ? super T> minMaxConsumer) {
-        List<T> list = stream.sorted(order).collect(Collectors.toList());
+                                      BiConsumer<Optional<T>, Optional<T>> minMaxConsumer) {
+        List<T> list = stream.collect(Collectors.toList());
+        Optional<T> min = Optional.of(Collections.min(list,order));
+        Optional<T> max = Optional.of(Collections.max(list,order));
+        /*stream.sorted(order).collect(Collectors.toList());
+
         if(list.isEmpty())
             minMaxConsumer.accept(null, null);
         else
-            minMaxConsumer.accept(list.get(0),list.get(list.size()-1));
+            minMaxConsumer.accept(list.get(0),list.get(list.size()-1));*/
 
-
+        minMaxConsumer.accept(min,max);
     }
 
     public static void findEvenNumbers(List<Integer> list3) {
@@ -39,7 +40,7 @@ public class Main {
             }
 
         };
-        BiConsumer <Integer, Integer> bicons = (x,y) -> {
+        BiConsumer <Optional<Integer>,Optional<Integer>> bicons = (x,y) -> {
             System.out.println(x + " " + y);
         };
         findMinMax(stream1,compar1,bicons);
